@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
-import usersService from "../services/UserService";
+import userService from "../services/UserService";
 import { Const } from "../utils/const";
 
 class UserController {
   constructor() {}
   async create(req: Request, res: Response): Promise<Response> {
     try {
-      const user = await usersService.create(req.body);
+      await userService.create(req.body);
       return res.status(Const.httpStatus.CREATED).json({
-        message: "Usuário criado com sucesso.",
-        user,
+        message: "UsuÃ¡rio criado com sucesso.",
       });
     } catch (error: any) {
+      console.log(error);
       return res
         .status(error.status || Const.httpStatus.ERROR_SERVER)
         .json(error);
@@ -19,7 +19,7 @@ class UserController {
   }
 
   async findAll(req: Request, res: Response): Promise<Response> {
-    const getUsers = await usersService.findAll();
+    const getUsers = await userService.findAll();
     try {
       return res.status(Const.httpStatus.OK).json(getUsers);
     } catch (error: any) {
@@ -32,7 +32,7 @@ class UserController {
   async findOne(req: Request, res: Response): Promise<Response> {
     try {
       const id = parseInt(req.params.id);
-      const user = await usersService.finOne(id);
+      const user = await userService.finOne(id);
       return res.status(Const.httpStatus.OK).json(user);
     } catch (error: any) {
       return res
@@ -44,9 +44,9 @@ class UserController {
   async delete(req: Request, res: Response): Promise<Response> {
     try {
       const id = parseInt(req.params.id);
-      await usersService.delete(id);
+      await userService.delete(id);
       return res.status(Const.httpStatus.OK).json({
-        message: "Usuário deletado com sucesso.",
+        message: "Usuï¿½rio deletado com sucesso.",
       });
     } catch (error: any) {
       return res
