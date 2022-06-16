@@ -8,15 +8,12 @@ import validate from "../validators/validate";
 import userCreateValidator from "../validators/userCreateValidator";
 import userAuthValidator from "../validators/userAuthValidator";
 import { UserAuthDTO } from "../dto/UserAuthDto";
-import { IUsersPerfilsRepository } from "../repositories/usersPerfils/IUsersPerfilsRepository";
-import UsersPerfilsPrismaRepository from "../repositories/usersPerfils/UsersPerfilsPrismaRepository";
 import { IPerfilRepository } from "../repositories/perfil/IPerfilRepository";
 import PerfilPrismaRepository from "../repositories/perfil/PerfilPrismaRepository";
 
 class UserService {
   constructor(
     private readonly userRepository: IUserRepository,
-    private readonly usersPerfilsRepository: IUsersPerfilsRepository,
     private readonly perfilRepository: IPerfilRepository
   ) {}
   async auth(user: UserAuthDTO) {
@@ -33,7 +30,7 @@ class UserService {
     const emailExists = await this.userRepository.findByEmail(
       userCreateDto.email
     );
-    const perfilsExists = await this.perfilRepository.findByIds(
+    const perfilExists = await this.perfilRepository.findById(
       userCreateDto.perfil
     );
     if (emailExists) {
@@ -43,28 +40,17 @@ class UserService {
       );
     } else if (data.errors) {
       throw new ResponseError(data.errors, Const.httpStatus.BAD_REQUEST);
-    } else if (!perfilsExists) {
-      throw new ResponseError("Perfil inválido", Const.httpStatus.BAD_REQUEST);
+    } else if (!perfilExists) {
+      throw new ResponseError("Perfil não existe.", Const.httpStatus.BAD_REQUEST);
     }
-    const createdUser = {
-      name: userCreateDto.name,
-      email: userCreateDto.email,
-      password: userCreateDto.password,
-    };
-    await this.userRepository.create(createdUser);
-    const user_id = await this.userRepository.findByLastId();
-    parseInt(user_id);
-    return await this.usersPerfilsRepository.create(
-      user_id,
-      userCreateDto.perfil
-    );
+    return await this.userRepository.create(userCreateDto);
   }
 
   async findAll(): Promise<User[]> {
     return await this.userRepository.findAll();
   }
 
-  async finOne(id: number): Promise<any> {
+  async findOne(id: number): Promise<any> {
     const user = await this.userRepository.finOne(id);
     if (!user) {
       throw new ResponseError(
@@ -86,8 +72,4 @@ class UserService {
     return await this.userRepository.delete(id);
   }
 }
-export default new UserService(
-  UserPrismaRepository,
-  UsersPerfilsPrismaRepository,
-  PerfilPrismaRepository
-);
+export default new UserService(UserPrismaRepository, PerfilPrismaRepository);

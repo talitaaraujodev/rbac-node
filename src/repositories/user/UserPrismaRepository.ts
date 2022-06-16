@@ -22,7 +22,6 @@ class UserPrismaRepository implements IUserRepository {
     const user = await prisma.user.create({
       data,
     });
-    delete user.password;
     return user;
   }
   async auth(data: UserAuthDTO): Promise<UserToken> {
@@ -63,6 +62,9 @@ class UserPrismaRepository implements IUserRepository {
     return await prisma.user.findUnique({
       where: {
         id,
+      },
+      include: {
+        userPerfil: true,
       },
     });
   }

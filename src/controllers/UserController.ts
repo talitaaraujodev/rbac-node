@@ -6,9 +6,10 @@ class UserController {
   constructor() {}
   async create(req: Request, res: Response): Promise<Response> {
     try {
-      await userService.create(req.body);
+      const user = await userService.create(req.body);
       return res.status(Const.httpStatus.CREATED).json({
         message: "Usuário criado com sucesso.",
+        user,
       });
     } catch (error: any) {
       console.log(error);
@@ -32,7 +33,7 @@ class UserController {
   async findOne(req: Request, res: Response): Promise<Response> {
     try {
       const id = parseInt(req.params.id);
-      const user = await userService.finOne(id);
+      const user = await userService.findOne(id);
       return res.status(Const.httpStatus.OK).json(user);
     } catch (error: any) {
       return res

@@ -24,5 +24,10 @@ class PerfilPrismaRepository implements IPerfilRepository {
     });
     return perfils;
   }
+  async findById(id: number): Promise<any> {
+    return await prisma.permission.findMany({
+      where: { id },
+    });
+  }
 }
 export default new PerfilPrismaRepository();

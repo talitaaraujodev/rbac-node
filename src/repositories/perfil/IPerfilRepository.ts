@@ -5,6 +5,6 @@ interface IPerfilRepository {
   findByName: (name: string) => Promise<Perfil>;
   findByLastId: () => Promise<any>;
   findByIds(ids: number[]): Promise<any>;
-  
+  findById: (id: number) => Promise<any>;
 }
 export { IPerfilRepository };
