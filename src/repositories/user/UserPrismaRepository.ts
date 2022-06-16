@@ -86,7 +86,7 @@ class UserPrismaRepository implements IUserRepository {
       orderBy: { id: "desc" },
       take: 1,
     });
-    return lastId.map((item) => item.id);
+    return lastId.map((item: any) => item.id);
   }
 }
 export default new UserPrismaRepository();

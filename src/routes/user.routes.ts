@@ -7,26 +7,27 @@ const usersRouter = Router();
 usersRouter.get(
   "/users",
   authValidator,
-  is("Administrador"),
+  is(["Administrador", "Cliente"]),
   UsersController.findAll
 );
 usersRouter.get(
   "/users/:id",
   authValidator,
-  is("Administrador"),
+  is(["Administrador", "Cliente"]),
   UsersController.findOne
 );
 usersRouter.post(
   "/users",
   authValidator,
-  is("Administrador"),
+  is(["Administrador", "Cliente"]),
   UsersController.create
 );
 usersRouter.delete(
   "/users/:id",
   authValidator,
-  is("Administrador"),
+  is(["Administrador", "Cliente"]),
   UsersController.delete
 );
+usersRouter.get("/me", authValidator, UsersController.me);
 
 module.exports = usersRouter;

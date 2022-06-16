@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import userService from "../services/UserService";
 import { Const } from "../utils/const";
+import { decode } from "jsonwebtoken";
 
 class UserController {
   constructor() {}
@@ -47,9 +48,24 @@ class UserController {
       const id = parseInt(req.params.id);
       await userService.delete(id);
       return res.status(Const.httpStatus.OK).json({
-        message: "Usu�rio deletado com sucesso.",
+        message: "Usuário deletado com sucesso.",
       });
     } catch (error: any) {
+      return res
+        .status(error.status || Const.httpStatus.ERROR_SERVER)
+        .json(error);
+    }
+  }
+  async me(req: Request, res: Response): Promise<Response> {
+    try {
+      const authHeader = req.headers.authorization;
+      const [, token]: any = authHeader?.split(" ");
+      const payload: any = decode(token);
+      const id = parseInt(payload?.subject.sub);
+      const user = await userService.findOne(id);
+      return res.status(Const.httpStatus.OK).json(user);
+    } catch (error: any) {
+      console.log(error);
       return res
         .status(error.status || Const.httpStatus.ERROR_SERVER)
         .json(error);

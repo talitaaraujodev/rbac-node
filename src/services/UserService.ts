@@ -41,7 +41,10 @@ class UserService {
     } else if (data.errors) {
       throw new ResponseError(data.errors, Const.httpStatus.BAD_REQUEST);
     } else if (!perfilExists) {
-      throw new ResponseError("Perfil não existe.", Const.httpStatus.BAD_REQUEST);
+      throw new ResponseError(
+        "Perfil não existe.",
+        Const.httpStatus.BAD_REQUEST
+      );
     }
     return await this.userRepository.create(userCreateDto);
   }

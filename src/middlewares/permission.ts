@@ -15,7 +15,7 @@ async function decoder(req: Request): Promise<User | any> {
   return Array(user);
 }
 
-function is(perfil: String) {
+function is(perfil: String[]) {
   const perfilAuthorized = async (
     req: Request,
     res: Response,

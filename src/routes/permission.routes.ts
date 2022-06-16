@@ -7,7 +7,7 @@ const permissionsRouter = Router();
 permissionsRouter.post(
   "/permissoes",
   authValidator,
-  is("Administrador"),
+  is(["Administrador"]),
   PermissionController.create
 );
 

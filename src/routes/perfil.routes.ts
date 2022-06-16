@@ -7,7 +7,7 @@ const perfilsRouter = Router();
 perfilsRouter.post(
   "/perfils",
   authValidator,
-  is("Administrador"),
+  is(["Administrador"]),
   PerfilController.create
 );
 
